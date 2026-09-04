@@ -1,1 +1,1215 @@
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">Happy Birthday!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&family=Caveat:wght@500;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --cream: #fff6ec;
+      --pink: #ff6fa1;
+      --pink-deep: #e2417a;
+      --yellow: #ffc93c;
+      --mint: #35c9ae;
+      --periwinkle: #7c6ff2;
+      --ink: #3a2145;
+      --paper: #fffdf8;
+      --display: 'Baloo 2', sans-serif;
+      --body: 'Quicksand', sans-serif;
+      --script: 'Caveat', cursive;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--body);
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    html.locked,
+    html.locked body {
+      overflow: hidden;
+      height: 100%;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* ================= ambient background ================= */
+    #ambient {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 60% 40% at 15% 0%, #ffe3ee 0%, transparent 60%),
+        radial-gradient(ellipse 50% 35% at 100% 10%, #e8e2ff 0%, transparent 60%),
+        var(--cream);
+    }
+
+    .balloon {
+      position: absolute;
+      bottom: -140px;
+      width: 52px;
+      height: 66px;
+      border-radius: 50% 50% 50% 50% / 58% 58% 42% 42%;
+      opacity: 0.85;
+      animation: floatUp linear infinite;
+    }
+
+    .balloon::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -46px;
+      width: 1px;
+      height: 46px;
+      background: rgba(58, 33, 69, 0.25);
+      transform: translateX(-50%);
+    }
+
+    .balloon::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 100%;
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 7px solid inherit;
+      transform: translateX(-50%);
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-58vh) translateX(24px) rotate(4deg);
+      }
+
+      100% {
+        transform: translateY(-116vh) translateX(-8px) rotate(-3deg);
+      }
+    }
+
+    .confetti-bit {
+      position: absolute;
+      top: -5%;
+      opacity: 0.9;
+      animation-name: confettiFall, confettiSpin;
+      animation-timing-function: linear, linear;
+      animation-iteration-count: infinite, infinite;
+    }
+
+    @keyframes confettiFall {
+      to {
+        transform: translateY(112vh);
+      }
+    }
+
+    @keyframes confettiSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ================= cake-cut cover ================= */
+    .cover {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 0%, #ffd7e6 0%, transparent 60%),
+        linear-gradient(180deg, #fff3e4 0%, #ffe8ee 60%, #ffd9e6 100%);
+      text-align: center;
+      padding: 32px 24px;
+      transition: transform 1s cubic-bezier(.65, 0, .35, 1), opacity 1s ease;
+      touch-action: none;
+    }
+
+    .cover.opened {
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .cover-kicker {
+      font-family: var(--body);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--pink-deep);
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .cover-title {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: clamp(30px, 6vw, 50px);
+      color: var(--ink);
+      margin: 0 0 6px;
+      line-height: 1.05;
+    }
+
+    .cover-title span {
+      color: var(--pink-deep);
+    }
+
+    .cover-instruction {
+      font-family: var(--body);
+      font-weight: 500;
+      color: #6b4f74;
+      font-size: 15px;
+      margin: 2px 0 28px;
+    }
+
+    .cake-stage {
+      position: relative;
+      width: 260px;
+      height: 236px;
+      touch-action: none;
+      cursor: grab;
+      user-select: none;
+    }
+
+    .cake-stage:active {
+      cursor: grabbing;
+    }
+
+    .cake-plate {
+      position: absolute;
+      left: 50%;
+      bottom: 6px;
+      transform: translateX(-50%);
+      width: 230px;
+      height: 22px;
+      background: radial-gradient(ellipse at 50% 30%, #ffffff 0%, #f0e9e4 70%, #ded2ca 100%);
+      border-radius: 50%;
+      box-shadow: 0 10px 14px -6px rgba(58, 33, 69, 0.35);
+      z-index: 1;
+    }
+
+    .candles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    .candle-single {
+      position: absolute;
+      top: 34px;
+      width: 8px;
+      height: 40px;
+      transform: translateX(-50%);
+      transition: opacity .4s ease, transform .4s ease;
+    }
+
+    .candle-single .wax {
+      width: 100%;
+      height: 100%;
+      border-radius: 2px;
+      background-image: repeating-linear-gradient(180deg, var(--candle-color, #7c6ff2) 0 7px, #fff 7px 14px);
+      box-shadow: inset -2px 0 2px rgba(0, 0, 0, 0.08);
+    }
+
+    .flame {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 9px;
+      height: 15px;
+      background: radial-gradient(circle at 50% 70%, #fff3b0 0%, var(--yellow) 45%, #ff8a3d 85%);
+      border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+      animation: flicker 1.5s ease-in-out infinite;
+      animation-delay: var(--flicker-delay, 0s);
+      filter: drop-shadow(0 0 6px rgba(255, 180, 60, 0.7));
+    }
+
+    @keyframes flicker {
+
+      0%,
+      100% {
+        transform: translateX(-50%) scale(1) rotate(-2deg);
+      }
+
+      50% {
+        transform: translateX(-50%) scale(0.9, 1.08) rotate(3deg);
+      }
+    }
+
+    .puff {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translate(-50%, 0) scale(0.3);
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .cake-stage.cut .puff {
+      animation: puffOut .7s ease forwards;
+    }
+
+    .cake-stage.cut .flame {
+      animation: none;
+      opacity: 0;
+      transition: opacity .2s ease;
+    }
+
+    .cake-stage.cut .candle-single {
+      transform: translateX(-50%) translateY(3px);
+    }
+
+    @keyframes puffOut {
+      0% {
+        opacity: 0.9;
+        transform: translate(-50%, 0) scale(0.3);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -18px) scale(1.8);
+      }
+    }
+
+    .cake-half {
+      position: absolute;
+      left: 50%;
+      bottom: 22px;
+      width: 230px;
+      height: 190px;
+      transform: translateX(-50%);
+      transition: transform .8s cubic-bezier(.34, 1.56, .64, 1), opacity .5s ease;
+      z-index: 3;
+    }
+
+    .cake-half svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .cake-half.left {
+      clip-path: inset(0 50% 0 0);
+    }
+
+    .cake-half.right {
+      clip-path: inset(0 0 0 50%);
+    }
+
+    .cake-stage.cut .cake-half.left {
+      transform: translateX(calc(-50% - 30px)) rotate(-6deg);
+    }
+
+    .cake-stage.cut .cake-half.right {
+      transform: translateX(calc(-50% + 30px)) rotate(6deg);
+    }
+
+    .cut-progress-track {
+      position: absolute;
+      bottom: -42px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 220px;
+      height: 6px;
+      border-radius: 6px;
+      background: rgba(58, 33, 69, 0.12);
+      overflow: hidden;
+      z-index: 4;
+    }
+
+    .cut-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--pink), var(--pink-deep));
+      border-radius: 6px;
+      transition: width .05s linear;
+    }
+
+    .cut-hint {
+      position: absolute;
+      bottom: -66px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--body);
+      font-size: 12px;
+      color: #8a7291;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      z-index: 4;
+    }
+
+    /* ================= mobile ================= */
+    @media (max-width:480px) {
+      .cover {
+        padding: 24px 16px;
+      }
+
+      .cover-title {
+        font-size: clamp(24px, 7vw, 32px);
+      }
+
+      .cover-instruction {
+        font-size: 13px;
+        margin-bottom: 22px;
+      }
+
+      .cake-stage {
+        width: 208px;
+        height: 189px;
+      }
+
+      .cake-plate {
+        width: 184px;
+        height: 18px;
+        bottom: 5px;
+      }
+
+      .candles {
+        height: 52px;
+      }
+
+      .candle-single {
+        top: 27px;
+        width: 7px;
+        height: 32px;
+      }
+
+      .flame {
+        width: 8px;
+        height: 13px;
+        top: -13px;
+      }
+
+      .cake-half {
+        width: 184px;
+        height: 152px;
+        bottom: 18px;
+      }
+
+      .cut-progress-track {
+        width: 176px;
+        bottom: -34px;
+      }
+
+      .cut-hint {
+        bottom: -54px;
+        font-size: 11px;
+      }
+
+      .hero-birthday {
+        min-height: 64vh;
+        padding: 44px 18px 28px;
+      }
+
+      .hero-kicker {
+        font-size: 22px;
+      }
+
+      .section {
+        padding: 48px 16px;
+      }
+
+      .section-title {
+        margin-bottom: 4px;
+      }
+
+      .section-sub {
+        margin-bottom: 32px;
+      }
+
+      .lights-strip {
+        height: 58px;
+      }
+
+      .photocard {
+        width: 132px;
+        padding: 8px 8px 24px;
+      }
+
+      .photocard .frame {
+        height: 118px;
+      }
+
+      .garland-row {
+        gap: 20px 16px;
+      }
+
+      .wish-card {
+        width: 100%;
+        max-width: 320px;
+        padding: 20px 18px 16px;
+      }
+
+      .wishes-wall {
+        gap: 16px;
+      }
+    }
+
+    @media (max-width:360px) {
+      .cake-stage {
+        width: 180px;
+        height: 164px;
+      }
+
+      .cake-plate {
+        width: 160px;
+        height: 16px;
+      }
+
+      .cake-half {
+        width: 160px;
+        height: 132px;
+        bottom: 16px;
+      }
+
+      .candle-single {
+        top: 22px;
+      }
+
+      .cut-progress-track {
+        width: 150px;
+      }
+    }
+
+    /* ================= main content ================= */
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-birthday {
+      min-height: 78vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 24px 40px;
+    }
+
+    .hero-kicker {
+      font-family: var(--script);
+      font-size: 28px;
+      color: var(--pink-deep);
+      margin-bottom: 4px;
+    }
+
+    .hero-name {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: clamp(44px, 9vw, 88px);
+      line-height: 1;
+      margin: 0;
+      color: var(--ink);
+    }
+
+    .hero-name .hl {
+      color: var(--pink-deep);
+    }
+
+    .hero-tagline {
+      font-family: var(--body);
+      font-weight: 500;
+      font-size: 17px;
+      color: #6b4f74;
+      max-width: 440px;
+      margin: 18px 0 0;
+    }
+
+    /* chilli lights strip */
+    .lights-strip {
+      position: relative;
+      height: 74px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .lights-wire {
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      top: 14px;
+      height: 26px;
+    }
+
+    .chilli {
+      position: absolute;
+      top: 14px;
+      width: 16px;
+      height: 26px;
+      transform-origin: top center;
+    }
+
+    .chilli .string {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      width: 1px;
+      height: 16px;
+      background: rgba(58, 33, 69, 0.3);
+      transform: translateX(-50%);
+    }
+
+    .chilli .pepper {
+      width: 14px;
+      height: 22px;
+      border-radius: 0 0 60% 60% / 0 0 90% 90%;
+      background: var(--chilli-color, #ff5a45);
+      position: relative;
+      box-shadow: 0 0 10px 2px var(--chilli-color, #ff5a45);
+      animation: blink var(--blink-dur, 1.8s) ease-in-out infinite;
+      animation-delay: var(--blink-delay, 0s);
+    }
+
+    .chilli .pepper::before {
+      content: "";
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      width: 5px;
+      height: 7px;
+      background: #3a8f4a;
+      border-radius: 2px 2px 0 4px;
+      transform: translateX(-50%) rotate(-12deg);
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+        filter: brightness(1);
+      }
+
+      50% {
+        opacity: 0.45;
+        filter: brightness(0.7);
+      }
+    }
+
+    /* section shared */
+    .section {
+      position: relative;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 70px 24px;
+    }
+
+    .section-title {
+      font-family: var(--display);
+      font-weight: 700;
+      font-style: normal;
+      font-size: clamp(26px, 4vw, 36px);
+      color: var(--ink);
+      text-align: center;
+      margin: 0 0 8px;
+    }
+
+    .section-sub {
+      font-family: var(--script);
+      font-size: 20px;
+      color: var(--pink-deep);
+      text-align: center;
+      margin: 0 0 48px;
+    }
+
+    /* photo garland */
+    .garland-wrap {
+      position: relative;
+      padding-top: 26px;
+    }
+
+    .garland-string {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 1px;
+      background: rgba(58, 33, 69, 0.25);
+    }
+
+    .garland-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 26px 22px;
+    }
+
+    .photocard {
+      position: relative;
+      width: 160px;
+      background: var(--paper);
+      padding: 10px 10px 30px;
+      box-shadow: 0 10px 22px rgba(58, 33, 69, 0.14);
+      transform-origin: top center;
+      animation: sway var(--sway-dur, 4.5s) ease-in-out infinite;
+      animation-delay: var(--sway-delay, 0s);
+    }
+
+    .photocard::before {
+      content: "";
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      background: var(--peg-color, var(--periwinkle));
+      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .photocard .frame {
+      width: 100%;
+      height: 150px;
+      background: linear-gradient(160deg, #ffe3ee, #e3ddff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .photocard .frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photocard .placeholder-icon {
+      font-size: 34px;
+      opacity: 0.55;
+    }
+
+    .photocard .caption {
+      display: block;
+      text-align: center;
+      margin-top: 8px;
+      font-family: var(--script);
+      font-size: 16px;
+      color: #6b4f74;
+    }
+
+    @keyframes sway {
+
+      0%,
+      100% {
+        transform: rotate(-3deg);
+      }
+
+      50% {
+        transform: rotate(3deg);
+      }
+    }
+
+    /* wishes wall */
+    .wishes-wall {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 22px;
+    }
+
+    .wish-card {
+      width: 270px;
+      background: var(--paper);
+      padding: 24px 22px 20px;
+      position: relative;
+      box-shadow: 0 12px 26px rgba(58, 33, 69, 0.12);
+      opacity: 0;
+      transform: translateY(18px) rotate(var(--rot, 0deg));
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .wish-card.in-view {
+      opacity: 1;
+      transform: translateY(0) rotate(var(--rot, 0deg));
+    }
+
+    .wish-card::after {
+      content: "";
+      position: absolute;
+      top: -9px;
+      left: 26px;
+      width: 36px;
+      height: 18px;
+      background: rgba(255, 201, 60, 0.75);
+      transform: rotate(-4deg);
+    }
+
+    .wish-quote {
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--ink);
+      margin: 6px 0 14px;
+    }
+
+    .wish-from {
+      font-family: var(--script);
+      font-size: 19px;
+      color: var(--pink-deep);
+      text-align: right;
+      display: block;
+    }
+
+    footer {
+      text-align: center;
+      padding: 60px 24px 50px;
+      font-family: var(--body);
+      font-size: 14px;
+      color: #8a7291;
+    }
+
+    footer .foot-line {
+      margin: 0 0 4px;
+    }
+
+    footer .foot-sub {
+      margin: 0;
+      font-size: 13px;
+    }
+
+    footer .script-inline {
+      font-family: var(--script);
+      font-size: 20px;
+      color: var(--pink-deep);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==========================================================================
+     WISH CONFIG — pass the birthday person's name, wishes, and photos here.
+     Leave `photos` empty (or leave a photo's `src` blank) to show a cute
+     placeholder card instead — nothing breaks if details are missing.
+========================================================================== -->
+  <script>
+    const WISH_CONFIG = {
+      name: "Aiman",
+      sender: "Zoya",
+
+      wishes: [
+        { from: "Mama & Baba", message: "From the day you were born, you filled our home with so much light. May this year bring you everything your heart is quietly hoping for." },
+        { from: "Zoya", message: "Best friend, partner in chaos, my favourite person to laugh with over nothing. Happy birthday, love you endlessly." },
+        { from: "Hamza", message: "Here's to another year of terrible jokes, good food, and even better memories. So glad I get to call you my sister." },
+        { from: "Team at Work", message: "Working alongside you is a gift in itself. Hope your day is as wonderful and full of energy as you always are." }
+      ],
+
+      // Each photo can be { src, caption }. Leave src as "" to show a placeholder.
+      photos: [
+        { src: "https://scontent.fkhi22-1.fna.fbcdn.net/v/t39.30808-6/742800218_1560848352075530_1662538968783669305_n.jpg?stp=dst-jpg_tt6&cstp=mx1660x2048&ctp=s1660x2048&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHuE-dWaDLFAPG0ttbOtyvZoYCWRgvWegyhgJZGC9Z6DIenrv9Yi3sD_kJykufhNt1a0efug1AmHr8ewrY39nS4&_nc_ohc=8F3AYXeqJYkQ7kNvwEwkrot&_nc_oc=AdpGuEeVoaEVxxnU6ipOPS9WySh9v_9kB1DPpLK0h2zi9-2uPEM22WnkMFymuz0c16c&_nc_zt=23&_nc_ht=scontent.fkhi22-1.fna&_nc_gid=giyvf1LZDp7UFeWsaLJ8_g&_nc_ss=7b2a8&oh=00_AQIs1J-Ui9ByQiWGI1EIxlVz-ntBdc19rdheosmS7rng6A&oe=6AA07988", caption: "That road trip" },
+        { src: "https://scontent.fkhi22-1.fna.fbcdn.net/v/t39.30808-6/741670576_1560848402075525_1792342365043199237_n.jpg?stp=dst-jpg_tt6&cstp=mx1360x2048&ctp=s1360x2048&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHMs8BdI9vMkzgZvNKZRasF7HYs1rDSLSDsdizWsNItIPmAW6As_dauDu529WWBEktMJkdHlXEq-RqFujkbalpI&_nc_ohc=YBhfhRJDVXsQ7kNvwHJ2uen&_nc_oc=AdokmY5IDlayC1lissazfhxERLStZXgKULCn5Pu_DW27GtOo7YA69h2IOXprdRycmL4&_nc_zt=23&_nc_ht=scontent.fkhi22-1.fna&_nc_gid=45cpIsZ0oNQmrK6eDXvaTg&_nc_ss=7b2a8&oh=00_AQKH45svhalI1Q_HbS3n08fOrJsN1XVm90TWLIOYXxf7mQ&oe=6AA067DC", caption: "Engagement Ring" },
+        { src: "https://scontent.fkhi17-2.fna.fbcdn.net/v/t39.30808-6/741693722_1560848208742211_7283381738266351351_n.jpg?stp=dst-jpg_tt6&cstp=mx1470x2048&ctp=s1470x2048&_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGtqW3W4lGoeZYxqol6GE5YvTyozB9JQ-q9PKjMH0lD6qFoL6w0d0cCmt4W9FV7MaJsBOHbqpOuN5h8HCD3s9i0&_nc_ohc=SAZGJOQMIUoQ7kNvwGXwAzp&_nc_oc=AdoWMq154GB7SqeuDs0vr-AYJR2xynuGq1Qv6ab8nQ6C0DBHyUbeJPJBshsics3_mRM&_nc_zt=23&_nc_ht=scontent.fkhi17-2.fna&_nc_gid=E8sgvT0iqruFiteJht0wFA&_nc_ss=7b2a8&oh=00_AQIOL1uWFp0_uhx3HNnskJJ-5vi-uEZINV02qSibJmmsGw&oe=6AA06AA8", caption: "Best birthday yet" },
+        { src: "https://scontent.fkhi17-2.fna.fbcdn.net/v/t39.30808-6/742208839_1560848288742203_2521779825296654195_n.jpg?stp=dst-jpg_tt6&cstp=mx1416x2048&ctp=s1416x2048&_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEzbrjIREmIpnwTIcyJedeCw3cdBhkBs8jDdx0GGQGzyKuKPhx8E51dkZ092ID2rBx2G4QYGazY4xrFEQ056ouK&_nc_ohc=PP7tVSSE75wQ7kNvwGmF6nY&_nc_oc=Adqx0z-6SZC_jzuwFwcR0qc33CL3ugHAIRf6UOhrpiK9wUo8-x6wWX-9_nQLoOcXsW4&_nc_zt=23&_nc_ht=scontent.fkhi17-2.fna&_nc_gid=2Tj_B5MD6brYJdauIh8axw&_nc_ss=7b2a8&oh=00_AQLzDwqwPv7nJ1lssqvMHVfy-6_pDt5Jz20a8xhksLZbIQ&oe=6AA060AE", caption: "Just us" },
+        { src: "https://scontent.fkhi17-2.fna.fbcdn.net/v/t39.30808-6/742407062_1560848248742207_844099190825836611_n.jpg?stp=dst-jpg_tt6&cstp=mx1346x2048&ctp=s1346x2048&_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFXKx2ilkgznESrlmv4wUSBDjhBXTrteBIOOEFdOu14ElU8_KR3EQ6I9CNmzxc2Tk_pse8iy0xgcnfQ-RVxlDwW&_nc_ohc=vouyjg-BSUYQ7kNvwHddEri&_nc_oc=AdpvbQONnkbryRP3eZ_JGCngpLYNRijbwjQHiYe8fx3LIAUg3AD7larXUNY1CWnKHZE&_nc_zt=23&_nc_ht=scontent.fkhi17-2.fna&_nc_gid=eBRvoNjWZ5iMRV2PT73Zqw&_nc_ss=7b2a8&oh=00_AQKxu-Ag4LSXS8funHUWLR-nYhetGaOB4Hp7oZ7kEqdrlQ&oe=6AA06B9F", caption: "First apartment" }
+      ]
+
+
+    };
+  </script>
+
+  <!-- ambient background -->
+  <div id="ambient"></div>
+
+  <!-- CAKE-CUT COVER -->
+  <div class="cover" id="cover">
+    <div class="cover-kicker">a little something for</div>
+    <h1 class="cover-title" id="coverTitle">It's <span id="coverName">Aiman</span>'s Birthday!</h1>
+    <p class="cover-instruction">Press and drag across the cake to cut it 🔪</p>
+    <div class="cake-stage" id="cakeStage">
+      <div class="candles">
+        <div class="candle-single" style="left:37%; --candle-color:#7c6ff2;">
+          <div class="wax"></div>
+          <div class="flame" style="--flicker-delay:0s;"></div>
+          <div class="puff"></div>
+        </div>
+        <div class="candle-single" style="left:50%; --candle-color:#ff6fa1;">
+          <div class="wax"></div>
+          <div class="flame" style="--flicker-delay:.3s;"></div>
+          <div class="puff"></div>
+        </div>
+        <div class="candle-single" style="left:63%; --candle-color:#35c9ae;">
+          <div class="wax"></div>
+          <div class="flame" style="--flicker-delay:.55s;"></div>
+          <div class="puff"></div>
+        </div>
+      </div>
+
+      <div class="cake-plate"></div>
+
+      <div class="cake-half left" id="cakeLeft">
+        <svg viewBox="0 0 230 190" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="tierTopL" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#fff0c9" />
+              <stop offset="100%" stop-color="#ffc93c" />
+            </linearGradient>
+            <linearGradient id="tierBotL" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffcfe0" />
+              <stop offset="100%" stop-color="#ff6fa1" />
+            </linearGradient>
+          </defs>
+          <ellipse cx="115" cy="182" rx="95" ry="8" fill="rgba(58,33,69,0.14)" />
+          <rect x="20" y="108" width="190" height="72" rx="18" fill="url(#tierBotL)" />
+          <path
+            d="M20 116 Q 32 100 44 116 Q 56 100 68 116 Q 80 100 92 116 Q 104 100 116 116 Q 128 100 140 116 Q 152 100 164 116 Q 176 100 188 116 Q 200 100 210 116 L210 128 L20 128 Z"
+            fill="#fff8ee" />
+          <g fill="#fff">
+            <circle cx="42" cy="150" r="3.4" />
+            <circle cx="66" cy="160" r="3" />
+            <circle cx="90" cy="145" r="3.6" />
+            <circle cx="118" cy="158" r="3" />
+            <circle cx="142" cy="148" r="3.4" />
+            <circle cx="168" cy="160" r="3" />
+            <circle cx="188" cy="146" r="3.4" />
+          </g>
+          <g fill="var(--periwinkle)" opacity="0.85">
+            <rect x="50" y="140" width="6" height="2.5" rx="1" transform="rotate(20 50 140)" />
+            <rect x="100" y="150" width="6" height="2.5" rx="1" transform="rotate(-15 100 150)" />
+            <rect x="150" y="138" width="6" height="2.5" rx="1" transform="rotate(35 150 138)" />
+            <rect x="180" y="158" width="6" height="2.5" rx="1" transform="rotate(-25 180 158)" />
+          </g>
+          <rect x="57" y="52" width="116" height="62" rx="16" fill="url(#tierTopL)" />
+          <path
+            d="M57 60 Q 68 45 79 60 Q 90 45 101 60 Q 112 45 123 60 Q 134 45 145 60 Q 156 45 167 60 L173 60 L173 72 L57 72 Z"
+            fill="#fffaf0" />
+          <g fill="#fff">
+            <circle cx="75" cy="90" r="3" />
+            <circle cx="98" cy="98" r="3.2" />
+            <circle cx="122" cy="88" r="3" />
+            <circle cx="148" cy="96" r="3.2" />
+          </g>
+        </svg>
+      </div>
+      <div class="cake-half right" id="cakeRight">
+        <svg viewBox="0 0 230 190" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="tierTopR" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#fff0c9" />
+              <stop offset="100%" stop-color="#ffc93c" />
+            </linearGradient>
+            <linearGradient id="tierBotR" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffcfe0" />
+              <stop offset="100%" stop-color="#ff6fa1" />
+            </linearGradient>
+          </defs>
+          <ellipse cx="115" cy="182" rx="95" ry="8" fill="rgba(58,33,69,0.14)" />
+          <rect x="20" y="108" width="190" height="72" rx="18" fill="url(#tierBotR)" />
+          <path
+            d="M20 116 Q 32 100 44 116 Q 56 100 68 116 Q 80 100 92 116 Q 104 100 116 116 Q 128 100 140 116 Q 152 100 164 116 Q 176 100 188 116 Q 200 100 210 116 L210 128 L20 128 Z"
+            fill="#fff8ee" />
+          <g fill="#fff">
+            <circle cx="42" cy="150" r="3.4" />
+            <circle cx="66" cy="160" r="3" />
+            <circle cx="90" cy="145" r="3.6" />
+            <circle cx="118" cy="158" r="3" />
+            <circle cx="142" cy="148" r="3.4" />
+            <circle cx="168" cy="160" r="3" />
+            <circle cx="188" cy="146" r="3.4" />
+          </g>
+          <g fill="var(--periwinkle)" opacity="0.85">
+            <rect x="50" y="140" width="6" height="2.5" rx="1" transform="rotate(20 50 140)" />
+            <rect x="100" y="150" width="6" height="2.5" rx="1" transform="rotate(-15 100 150)" />
+            <rect x="150" y="138" width="6" height="2.5" rx="1" transform="rotate(35 150 138)" />
+            <rect x="180" y="158" width="6" height="2.5" rx="1" transform="rotate(-25 180 158)" />
+          </g>
+          <rect x="57" y="52" width="116" height="62" rx="16" fill="url(#tierTopR)" />
+          <path
+            d="M57 60 Q 68 45 79 60 Q 90 45 101 60 Q 112 45 123 60 Q 134 45 145 60 Q 156 45 167 60 L173 60 L173 72 L57 72 Z"
+            fill="#fffaf0" />
+          <g fill="#fff">
+            <circle cx="75" cy="90" r="3" />
+            <circle cx="98" cy="98" r="3.2" />
+            <circle cx="122" cy="88" r="3" />
+            <circle cx="148" cy="96" r="3.2" />
+          </g>
+        </svg>
+      </div>
+
+      <div class="cut-progress-track">
+        <div class="cut-progress-fill" id="cutFill"></div>
+      </div>
+      <div class="cut-hint">slide to cut →</div>
+    </div>
+  </div>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero-birthday">
+      <div class="hero-kicker">happy birthday</div>
+      <h1 class="hero-name">it's <span class="hl" id="heroName">Aiman</span>'s day</h1>
+      <p class="hero-tagline">Every candle on that cake is a wish already coming true — here's everyone who's
+        celebrating you today.</p>
+    </section>
+
+    <!-- CHILLI LIGHTS -->
+    <div class="lights-strip" id="lightsStrip" aria-hidden="true"></div>
+
+    <!-- PHOTO GARLAND -->
+    <section class="section" id="memories">
+      <h2 class="section-title">A few of our favourite moments</h2>
+      <p class="section-sub">hung up just for today</p>
+      <div class="garland-wrap">
+        <div class="garland-string"></div>
+        <div class="garland-row" id="photoRow"></div>
+      </div>
+    </section>
+
+    <!-- WISHES WALL -->
+    <section class="section" id="wishes"
+      style="background:linear-gradient(180deg, transparent, rgba(255,201,60,0.08));">
+      <h2 class="section-title">Wishes for you</h2>
+      <p class="section-sub">from everyone who loves you</p>
+      <div class="wishes-wall" id="wishesWall"></div>
+    </section>
+
+    <footer>
+      <p class="foot-line">Made with love by <span class="script-inline" id="footSender">Zoya</span></p>
+      <p class="foot-sub">for <span id="footNameSub">Aiman</span>'s birthday, today and always 🎂</p>
+    </footer>
+  </main>
+
+  <script>
+    // ---------- apply config: name ----------
+    (function () {
+      const name = WISH_CONFIG.name || "You";
+      const sender = (WISH_CONFIG.sender || '').trim();
+      document.getElementById('pageTitle').textContent = 'Happy Birthday, ' + name + '!';
+      document.getElementById('coverName').textContent = name;
+      document.getElementById('heroName').textContent = name;
+      document.getElementById('footNameSub').textContent = name;
+
+      const senderEl = document.getElementById('footSender');
+      const footLine = senderEl.closest('.foot-line');
+      if (sender) {
+        senderEl.textContent = sender;
+      } else {
+        footLine.style.display = 'none';
+      }
+    })();
+
+    // ---------- ambient background: balloons + confetti ----------
+    (function () {
+      const wrap = document.getElementById('ambient');
+      const balloonColors = ['#ff8fb3', '#ffd166', '#8ecae6', '#c8b6ff', '#95e1c8'];
+      const balloonCount = window.innerWidth < 600 ? 5 : 9;
+      for (let i = 0; i < balloonCount; i++) {
+        const b = document.createElement('div');
+        b.className = 'balloon';
+        const color = balloonColors[i % balloonColors.length];
+        b.style.background = `radial-gradient(circle at 32% 28%, #fff8, ${color} 55%)`;
+        b.style.borderTopColor = color;
+        b.style.left = (Math.random() * 94) + 'vw';
+        const dur = 16 + Math.random() * 14;
+        b.style.animationDuration = dur + 's';
+        b.style.animationDelay = (-Math.random() * dur) + 's';
+        wrap.appendChild(b);
+      }
+      const confettiColors = ['#ff6fa1', '#ffc93c', '#7c6ff2', '#35c9ae', '#ff8a3d'];
+      const confettiCount = window.innerWidth < 600 ? 16 : 30;
+      for (let i = 0; i < confettiCount; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti-bit';
+        const size = 5 + Math.random() * 5;
+        const shapeRound = Math.random() > 0.5;
+        c.style.width = size + 'px';
+        c.style.height = size + 'px';
+        c.style.left = (Math.random() * 100) + 'vw';
+        c.style.background = confettiColors[i % confettiColors.length];
+        c.style.borderRadius = shapeRound ? '50%' : '2px';
+        const dur = 10 + Math.random() * 10;
+        c.style.animationDuration = dur + 's, ' + (dur * 0.6) + 's';
+        c.style.animationDelay = (-Math.random() * dur) + 's, 0s';
+        wrap.appendChild(c);
+      }
+    })();
+
+    // ---------- chilli lights ----------
+    (function () {
+      const strip = document.getElementById('lightsStrip');
+      const colors = ['#ff5a45', '#ffb23e', '#ff5a8a'];
+      const n = window.innerWidth < 600 ? 9 : 15;
+      let html = '<svg class="lights-wire" viewBox="0 0 1000 26" preserveAspectRatio="none"><path d="M0 4 Q 500 40 1000 4" stroke="rgba(58,33,69,0.3)" stroke-width="1.5" fill="none"/></svg>';
+      strip.innerHTML = html;
+      for (let i = 0; i < n; i++) {
+        const t = i / (n - 1);
+        const leftPct = t * 100;
+        const dipY = Math.sin(Math.PI * t) * 26;
+        const chilli = document.createElement('div');
+        chilli.className = 'chilli';
+        chilli.style.left = `calc(${leftPct}% - 8px)`;
+        chilli.style.top = (14 + dipY * 0.55) + 'px';
+        const color = colors[i % colors.length];
+        chilli.style.setProperty('--chilli-color', color);
+        chilli.style.setProperty('--blink-dur', (1.3 + Math.random() * 1.4) + 's');
+        chilli.style.setProperty('--blink-delay', (Math.random() * 2) + 's');
+        chilli.innerHTML = '<div class="string"></div><div class="pepper"></div>';
+        strip.appendChild(chilli);
+      }
+    })();
+
+    // ---------- photo garland ----------
+    (function () {
+      const row = document.getElementById('photoRow');
+      const pegColors = ['#7c6ff2', '#ff6fa1', '#35c9ae', '#ffc93c'];
+      const photos = (WISH_CONFIG.photos && WISH_CONFIG.photos.length) ? WISH_CONFIG.photos : [
+        { src: '', caption: 'Add a memory' }, { src: '', caption: 'Add a memory' }, { src: '', caption: 'Add a memory' }
+      ];
+      photos.forEach((p, i) => {
+        const card = document.createElement('div');
+        card.className = 'photocard';
+        card.style.setProperty('--peg-color', pegColors[i % pegColors.length]);
+        card.style.setProperty('--sway-dur', (4 + Math.random() * 2.5) + 's');
+        card.style.setProperty('--sway-delay', (-Math.random() * 4) + 's');
+        const frameInner = p.src
+          ? `<img src="${p.src}" alt="${escapeHtml(p.caption || '')}">`
+          : `<span class="placeholder-icon">🎈</span>`;
+        card.innerHTML = `
+        <div class="frame">${frameInner}</div>
+        ${p.caption ? `<span class="caption">${escapeHtml(p.caption)}</span>` : ''}
+      `;
+        row.appendChild(card);
+      });
+    })();
+
+    // ---------- wishes wall ----------
+    (function () {
+      const wall = document.getElementById('wishesWall');
+      const wishes = (WISH_CONFIG.wishes && WISH_CONFIG.wishes.length) ? WISH_CONFIG.wishes : [
+        { from: "Someone who cares", message: "Add your wishes to WISH_CONFIG.wishes to see them appear here." }
+      ];
+      wishes.forEach((w, i) => {
+        const card = document.createElement('div');
+        card.className = 'wish-card';
+        card.style.setProperty('--rot', ((i % 2 === 0 ? -1 : 1) * (1 + Math.random() * 2)) + 'deg');
+        card.innerHTML = `
+        <p class="wish-quote">${escapeHtml(w.message || '')}</p>
+        <span class="wish-from">— ${escapeHtml(w.from || 'Someone who loves you')}</span>
+      `;
+        wall.appendChild(card);
+      });
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+      }, { threshold: 0.2 });
+      document.querySelectorAll('.wish-card').forEach(c => obs.observe(c));
+    })();
+
+    function escapeHtml(str) {
+      const d = document.createElement('div');
+      d.textContent = str;
+      return d.innerHTML;
+    }
+
+    // ---------- cake cut interaction ----------
+    (function () {
+      document.documentElement.classList.add('locked');
+      const cover = document.getElementById('cover');
+      const stage = document.getElementById('cakeStage');
+      const fill = document.getElementById('cutFill');
+      const CUT_THRESHOLD = 260; // total pointer travel (px) needed to finish the cut
+
+      let dragging = false;
+      let lastX = 0, lastY = 0;
+      let total = 0;
+      let done = false;
+
+      function onDown(e) {
+        if (done) return;
+        dragging = true;
+        const p = pointFrom(e);
+        lastX = p.x; lastY = p.y;
+        try { stage.setPointerCapture(e.pointerId); } catch (err) { }
+      }
+      function onMove(e) {
+        if (!dragging || done) return;
+        const p = pointFrom(e);
+        const dx = p.x - lastX;
+        const dy = p.y - lastY;
+        lastX = p.x; lastY = p.y;
+        total += Math.hypot(dx, dy);
+        const progress = Math.min(total / CUT_THRESHOLD, 1);
+        fill.style.width = (progress * 100) + '%';
+        if (progress >= 1) {
+          finishCut();
+        }
+      }
+      function onUp() {
+        dragging = false;
+      }
+      function pointFrom(e) {
+        if (e.touches && e.touches[0]) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        return { x: e.clientX, y: e.clientY };
+      }
+
+      stage.addEventListener('pointerdown', onDown);
+      stage.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
+      // touch fallback for older/mismatched browsers
+      stage.addEventListener('touchstart', onDown, { passive: true });
+      stage.addEventListener('touchmove', onMove, { passive: true });
+      window.addEventListener('touchend', onUp);
+
+      function finishCut() {
+        if (done) return;
+        done = true;
+        stage.classList.add('cut');
+        setTimeout(function () {
+          cover.classList.add('opened');
+          document.documentElement.classList.remove('locked');
+        }, 750);
+        setTimeout(function () {
+          cover.style.display = 'none';
+        }, 1900);
+      }
+    })();
+  </script>
+
+</body>
+
+</html>
